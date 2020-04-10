@@ -1,0 +1,113 @@
+const int ledblue=2; 
+const int ledyellow=3;
+const int buttonPin = 4;     
+const int ledPin =  5; 
+int buttonState = 0;
+
+int tx=1;
+int rx=0;
+char inSerial[15];
+
+
+void setup(){
+Serial.begin(9600);
+
+//setting pin modes for led and button
+
+pinMode(ledblue, OUTPUT);
+pinMode (ledyellow, OUTPUT);
+pinMode(ledPin, OUTPUT);      
+pinMode(buttonPin, INPUT_PULLUP);  
+
+//setting pin for bluetooth
+pinMode(tx, OUTPUT);
+pinMode(rx, INPUT);
+allpinslow();
+}
+
+void loop(){  //loop start
+buttonState = digitalRead(buttonPin); // reading data from push button
+
+int i=0;
+int m=0;
+delay(500);
+if (Serial.available() > 0) {
+while (Serial.available() > 0) {
+inSerial[i]=Serial.read();   // reading string data send from android device
+i++;
+}
+inSerial[i]='\0';  //terminating string
+Check_Protocol(inSerial);
+}
+   // checking button status pressed of released \
+   
+  if (buttonState == HIGH) { 
+      digitalWrite(ledPin, HIGH);
+      Serial.print("Pressed\n"); 
+    }
+      else if ((buttonState == LOW)){
+      digitalWrite(ledPin, LOW);
+      Serial.print("Released\n");   
+    }
+
+}  // loop closed
+
+
+void allpinslow()
+{
+digitalWrite(ledblue, HIGH);
+digitalWrite(ledblue, LOW);
+}
+
+
+void Check_Protocol(char inStr[]){  //funtion recieves string sent from android to check led status
+int i=0;
+int m=0;
+Serial.println(inStr);
+
+
+if(!strcmp(inStr,"2off")){ //Red Led Off
+allpinslow();
+digitalWrite(ledblue, LOW);
+Serial.println("Red Off");
+for(m=0;m<11;m++){
+inStr[m]=0;}
+i=0;}
+
+
+if(!strcmp(inStr,"2on")){ //Red Led on
+allpinslow();
+digitalWrite(ledblue, HIGH);
+Serial.println("Red on");
+for(m=0;m<11;m++){
+inStr[m]=0;}
+i=0;}
+
+
+
+if(!strcmp(inStr,"3off")){ //Yellow Led Off
+allpinslow();
+digitalWrite(ledyellow, LOW);
+Serial.println("Yellow Off");
+for(m=0;m<11;m++){
+inStr[m]=0;}
+i=0;}
+
+
+if(!strcmp(inStr,"3on")){ //Yellow Led on
+allpinslow();
+digitalWrite(ledyellow, HIGH);
+Serial.println("Yellow on");
+for(m=0;m<11;m++){
+inStr[m]=0;}
+i=0;}
+
+
+else{   
+for(m=0;m<11;m++){
+inStr[m]=0;
+}
+i=0;
+
+}
+}

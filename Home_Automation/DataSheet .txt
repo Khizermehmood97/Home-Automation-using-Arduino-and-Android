@@ -1,0 +1,8 @@
+BlueTooth Arduino Interface DataSheet
+
+BlueTooth --> Arduino UNO R3
+
+    Vcc   -->  5v
+    Gnd   -->  Gnd
+    TxT   -->  Rx
+    RxD   -->  Tx (with 2.2k ohms resistor)
